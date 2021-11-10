@@ -409,7 +409,7 @@ public class Imap extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
-                    Folder[] folders = store.getDefaultFolder().list(pattern);
+                    Folder[] folders = store.getDefaultFolder().list((pattern == null || pattern.equals("null")) ? "*" : pattern);
 
                     JSONArray resultData = new JSONArray(Arrays.stream(folders).map(Folder::getFullName).toArray());
 
