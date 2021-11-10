@@ -125,6 +125,13 @@ public class Imap extends CordovaPlugin {
 
             this.setFlag(folderName, messageNums, flag, status, callbackContext);
             return true;
+        } else if (action.equals("searchMessages")) {
+            String folderName = args.getString(0);
+            String query = args.getString(1);
+            int page = 1;
+            int limit = 50;
+            this.searchMessages(folderName, query, page, limit, callbackContext);
+            return true;
         }
         return false;
     }
@@ -398,6 +405,20 @@ public class Imap extends CordovaPlugin {
                     boolean status = store.isConnected();
 
                     callbackContext.sendPluginResult(new PluginResult(Status.OK, status));
+                } catch (Exception ex) {
+                    callbackContext.error("Failed " + ex);
+                }
+            }
+        });
+    }
+    
+    private void searchMessages(String folderName, String query, int page, int limit, CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    Folder emailFolder = store.getFolder(folderName);
+                    Message[] messages = emailFolder.search(query);
+                    callbackContext.success(parseMessagesHeaders(messages));
                 } catch (Exception ex) {
                     callbackContext.error("Failed " + ex);
                 }
