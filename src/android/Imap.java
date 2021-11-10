@@ -38,8 +38,11 @@ import javax.mail.search.SearchTerm;
 import javax.mail.BodyPart;
 import javax.mail.Header;
 import javax.mail.Flags;
-import javax.mail.search.SearchTerm;
-
+import javax.mail.search.StringTerm;
+import javax.mail.search.SubjectTerm;
+import javax.mail.search.AddressStringTerm;
+import javax.mail.search.BodyTerm;
+import javax.mail.search.OrTerm;
 
 public class Imap extends CordovaPlugin {
 
@@ -419,7 +422,7 @@ public class Imap extends CordovaPlugin {
                 try {
                     Folder emailFolder = store.getFolder(folderName);
                     /* TODO: split the query up by spaces and concatenate with AndTerm */
-                    StringTerm term = new StringTerm(query, true);
+                    StringTerm term = new SubjectTerm(query);
                     Message[] messages = emailFolder.search(term);
                     callbackContext.success(parseMessagesHeaders(messages));
                 } catch (Exception ex) {
