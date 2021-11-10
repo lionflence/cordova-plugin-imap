@@ -411,13 +411,15 @@ public class Imap extends CordovaPlugin {
             }
         });
     }
-    
+
     private void searchMessages(String folderName, String query, int page, int limit, CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
                     Folder emailFolder = store.getFolder(folderName);
-                    Message[] messages = emailFolder.search(query);
+                    /* TODO: split the query up by spaces and concatenate with AndTerm */
+                    StringTerm term = new StringTerm(query, true);
+                    Message[] messages = emailFolder.search(term);
                     callbackContext.success(parseMessagesHeaders(messages));
                 } catch (Exception ex) {
                     callbackContext.error("Failed " + ex);
