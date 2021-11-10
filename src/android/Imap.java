@@ -38,6 +38,7 @@ import javax.mail.search.SearchTerm;
 import javax.mail.BodyPart;
 import javax.mail.Header;
 import javax.mail.Flags;
+import javax.mail.search.SearchTerm;
 
 
 public class Imap extends CordovaPlugin {
